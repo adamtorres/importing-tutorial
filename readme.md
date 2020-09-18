@@ -146,9 +146,7 @@ To get a list of available modules, keywords, symbols, or
 topics, type "modules", "keywords", "symbols", or "topics".
 ```
 
-Also note the prompt has changed from `>>>` to `help>`.  To exit the help prompt, just press enter on an empty line.
-
-From here, you can type `modules`, `keywords`, etc and see a listing of such to get further help on just by typing the terms.
+Also note the prompt has changed from `>>>` to `help>`.  From here, you can type `modules`, `keywords`, etc and see a listing of such to get further help on just by typing the terms.  To exit the help prompt, just press enter on an empty line.
 
 As a shortcut, you can include the terms in the initial `help()` call.  For example, to see the listing of modules without having to start the interactive bit, add `'modules'` to the call.
 
@@ -156,7 +154,7 @@ As a shortcut, you can include the terms in the initial `help()` call.  For exam
 >>> help('modules')
 ```
 
-Note that the term is in quotes.  Python does not care about single or double quotes most of the time so long as there are quotes.  Google "style guide" for reasons other people care.  The 'topics' listing is nice as it somewhat covers the goal of this doc under "IMPORTING" and "NAMESPACES".
+Note that the term is in quotes.  For strings, Python does not care about single or double quotes most of the time so long as there are quotes.  Google "style guide" for reasons other people care.  The 'topics' listing is nice as it somewhat covers the goal of this doc under "IMPORTING" and "NAMESPACES".
 
 ----
 
@@ -179,11 +177,14 @@ One more turn.
 > 2. Exactly-once delivery
 
 Let us say you have a neat function.  It initializes the resources necessary to interact with a text file and provides an object from which the user can perform those interactions.  It makes sense to call it `open`.  But what about the other guy that wrote some fancy code to do similar but for network communication?  He also wants to call his function `open`.
-With namespaces, this is not a problem.  When you run `import os`, one of the functions included is `open` but it is stored within the `os` namespace.  To use the function with the import statement provided, you would have to include the namespace; `os.open()`.  If you change the import line around to `from os import open`, then you can call it as simply `open()` but you'd have to explicitly rename any other imported `open` functions or import them such that they'd require the namespace on each call.
-Personally, I prefer to import to the namespace level when I think about it (meaning there are plenty of examples where I don't do that).  This makes it trivial to know where a piece of code is defined just by looking at the call.  Granted, most IDEs provide a way to jump to the declaration so it isn't that important.  Generally, it is beneficial to be consistent.  Google "style guide" for more on that.
-Both directories and file names affect the namespaces that python uses.  As with most things, there are ways around that.  But for now, just know that if you have a file called `billy.py`, python will see things within it as `billy.function_name`.
 
-For python's built-in help on namespaces, see:
+With namespaces, this is not a problem.  When you run `import os`, one of the functions included is `open` but it is stored within the `os` namespace.  To use the function with the import statement provided, you would have to include the namespace; `os.open()`.  If you change the import line around to `from os import open`, then you can call it as simply `open()` but you'd have to explicitly rename any other imported `open` functions or import them such that they'd require the namespace on each call.
+
+Personally, I prefer to import to the namespace level when I think about it (meaning there are plenty of examples where I don't do that).  This makes it trivial to know where a piece of code is defined just by looking at the call.  Granted, most IDEs provide a way to jump to the declaration so it isn't that important.  Generally, it is beneficial to be consistent.  Google "style guide" for more on that.
+
+Both directories and file names affect the namespaces that Python uses.  As with most things, there are ways around that.  But for now, just know that if you have a file called `billy.py`, Python will see things within it as `billy.function_name`.
+
+For Python's built-in help on namespaces, see:
 ```
 >>> help('NAMESPACES')
 ```
@@ -192,7 +193,7 @@ For python's built-in help on namespaces, see:
 
 # Importing builtins
 
-A "builtin" is just some code that is included with python by default - it is "built in".  There's actually a builtins.py in python.  To see a list of the available modules you can import without having to pip install anything, use the help function mentioned earlier.
+A "builtin" is just some code that is included with Python by default - it is "built in".  There's actually a builtins.py in Python.  To see a list of the available modules you can import without having to pip install anything, use the help function mentioned earlier.
 
 ```
 >>> help('modules')
@@ -215,6 +216,14 @@ _testbuffer         fractions           readline            zlib
 _testcapi           ftplib              reprlib
 ```
 
+For a little insight into a general way to approach writing Python code, try:
+
+```
+import this
+```
+
+The output is a nice little poem-like thing giving a decent summary on how to write "pythonic" code.  It definitely isn't a set of hard-fast rules.  More so, it gives guidance.
+
 Example time.  Let's import `time` so we can get some `sleep`.
 
 ```
@@ -224,7 +233,7 @@ Example time.  Let's import `time` so we can get some `sleep`.
 Whew.  That was difficult.  We need some rest after that much work.  There's a `sleep` function in the `time` module that will let use rest for a bit.  But what if you do not know which function you needed?  You could either call help on the module, `help(time)`, or get a listing of the available functions, classes, and objects within the module.
 
 \<aside><br />
-I just noticed something odd.  On the command line, `ls` is used to get a listing of contents.  But in python, `dir` is used which is the same command Windows/DOS uses to get a listing of contents.  Anyways...<br />
+I just noticed something odd.  On the command line, `ls` is used to get a listing of contents.  But in Python, `dir` is used which is the same command Windows/DOS uses to get a listing of contents.  Anyways...<br />
 \</aside>
 
 Use the `dir()` function to get the list.
@@ -267,7 +276,7 @@ sleep(...)
 
 This output shows it takes a single argument that is the number of seconds and can be fractional.
 
-So to sleep for 3.14 seconds but also check to see how long it takes, we use the `time` command (non-python) to time how long the full command takes.  Since there would be some overhead in starting up python, we first run it with nothing and subtract that time from the sleep time.
+So to sleep for 3.14 seconds but also check to see how long it takes, we use the `time` command (non-Python) to time how long the full command takes.  Since there would be some overhead in starting up Python, we first run it with nothing and subtract that time from the sleep time.
 
 ```
 $ time python -c ""
@@ -350,7 +359,7 @@ generic_func() from first
 generic_func() from second
 ```
 
-This shows an important concept in how python deals with functions.  "Everything is an object" is a phrase I've heard somewhere but don't feel like looking up at the moment.  When a function is declared (the `def func_name()` line), what is happening is that an object named `func_name` is created with the value being the function body.  When the first `from/import` line is executed, the object `generic_func` is created and assigned the value as defined in `first.py`.  When the second `from/import` is executed, the existing `generic_func` object is overwritten and assigned the value from `second.py`.
+This shows an important concept in how Python deals with functions.  "Everything is an object" is a phrase I've heard somewhere but don't feel like looking up at the moment.  When a function is declared (the `def func_name()` line), what is happening is that an object named `func_name` is created with the value being the function body.  When the first `from/import` line is executed, the object `generic_func` is created and assigned the value as defined in `first.py`.  When the second `from/import` is executed, the existing `generic_func` object is overwritten and assigned the value from `second.py`.
 
 To further show how functions are objects, you can assign functions to variables.  One pattern I've used and seen used numerous times is to create/build a dict where the values are all functions.  The functions which start as `dict_func_example` in `first.py` show a basic example of how this works.
 
@@ -374,7 +383,7 @@ Side tracking a little to cover some details used in this example.
 
 ## The dict object
 A dict is a dictionary object.  It is made up of key/value pairs.  The keys can be any mix of "hashable types".  In general, strings, numbers, and tuples of strings and numbers are all I've used as keys.  The values can be anything from other strings and numbers to other dicts, functions, or objects.
-A dict is declared by using the curly braces and colons, `{'key1': 'value1', 'key2': 'value2'}`.  Keys can be added or removed after the initial declaration.  The dict is not immutable.  Not much in python is immutable.  Adding a key can be done by assigning a value to it, `a_dict_var['new key'] = 'some value'`.
+A dict is declared by using the curly braces and colons, `{'key1': 'value1', 'key2': 'value2'}`.  Keys can be added or removed after the initial declaration.  The dict is not immutable.  Not much in Python is immutable.  Adding a key can be done by assigning a value to it, `a_dict_var['new key'] = 'some value'`.
 Getting a value from a dict can be done using the square brackets the same way, `print(a_dict_var['new key'])`.  A caveat of using the square brackets is if the key does not exist in the dict, a `KeyError` will be raised.  If that error is not handled by your code, the program will crash.
 The `.get()` function on a dict is a way to safely get a value from a dict when you are not certain the key exists.  The `.get()` function takes one required argument and one optional argument for the default if the key does not exist.  In the `dict_func_example` function, if the desired key is not in the dict, the function `dict_func_example_default` is returned and assigned to `func`.
 
@@ -471,7 +480,7 @@ This tends to pop up mostly when using frameworks.  There have been times that I
 
 So far, the files have been in a flat namespace.  Everything has been at one level.  For sufficiently large projects, there would be groupings that would make sense to isolate.  Such as a group of modules all related to database access, another couple of groups related to file access and socket communication, and a final group for general utility functions.  At the first level within a group, the functions/classes/etc would likely be quite generic for the topic.  Going another folder level in would bring in some more specialized objects.  Bad car analogy: 1st level in would be a book on automobiles.  Next level in would be a book on cars (or trucks, vans, SUVs).  Next level in would be a book on luxury cars (or racing, cheap, off-road).
 
-Python uses a file named `__init__.py` to let it know the folder is supposed to be treated as a package.  This allows you to have folders in your project that python knows it doesn't have to worry about.  Many times, these files will be empty and just there to make python happy.  Every folder in a package's structure needs to have its own `__init__.py` file.
+Python uses a file named `__init__.py` to let it know the folder is supposed to be treated as a package.  This allows you to have folders in your project that Python knows it doesn't have to worry about.  Many times, these files will be empty and just there to make Python happy.  Every folder in a package's structure needs to have its own `__init__.py` file.
 
 The example files for this section are in the `structure` folder.
 Quick new thing: running python with the `-c` option allows running a short script without a file and without dealing with the interactive prompt.  "Short", in this case, is only because typing a long script as a one-line command would be silly.
@@ -562,7 +571,7 @@ util root-level function
 util commonly_useful_function
 ```
 
-The import statement within the function is executed only when the point of execution gets to it.  Once it does, the `/structure/...` print statements are executed as expected.  Then the function is called again, the import statement does not generate any output as python knows the file is already loaded.  There is a way to reimport modules, though.  So far, I've only used that feature in two places.  One of those is arguably not the best way.
+The import statement within the function is executed only when the point of execution gets to it.  Once it does, the `/structure/...` print statements are executed as expected.  Then the function is called again, the import statement does not generate any output as Python knows the file is already loaded.  There is a way to reimport modules, though.  So far, I've only used that feature in two places.  One of those is arguably not the best way.
 
 Use case #1: Plugins.  Imagine a folder where all of the files are inspected and imported if they meet a certain criteria at runtime.  This would allow adding/removing features without having to change any surrounding code.  As I said, arguably not too useful as a list of module names could be all that needs changed.
 
@@ -603,7 +612,7 @@ Given all that, I've rarely used it.  So the above few paragraphs are somewhat p
 
 Not sure how this is related to importing but I added it to the list earlier so here we go.
 
-There is a command line option on python which allows running a module directly.  Some of the builtin modules include such for whatever reasons.  One that I've used numerous times is in `http.server`.  This will start a simple HTTP server in the current folder.  This server doesn't do much other than serving up the files in the folder.  It can do some cgi (running scripts/executables) but I've not had it do so.
+There is a command line option on Python which allows running a module directly.  Some of the builtin modules include such for whatever reasons.  One that I've used numerous times is in `http.server`.  This will start a simple HTTP server in the current folder.  This server doesn't do much other than serving up the files in the folder.  It can do some cgi (running scripts/executables) but I've not had it do so.
 
 ```
 $ python -m http.server
@@ -628,7 +637,7 @@ if __name__ == '__main__':
     print("RUNNING!")
 ```
 
-Having just those two lines will have python print "RUNNING!" when running the command show earlier.  The reason for the `if` block is so someone importing this file will not get the "RUNNING!" output.  In a more fleshed out example, the block would prevent a server from starting up when all that was wanted was an import.
+Having just those two lines will have Python print "RUNNING!" when running the command show earlier.  The reason for the `if` block is so someone importing this file will not get the "RUNNING!" output.  In a more fleshed out example, the block would prevent a server from starting up when all that was wanted was an import.
 
 A good place to start when you want to extend the functionality of something is the source code for that something.  To do so, we will use the "go to declaration" feature that is in most IDEs.  To do so, add the import line at the top of the file.
 
@@ -636,7 +645,7 @@ A good place to start when you want to extend the functionality of something is 
 from http import server
 ```
 
-Then, put the cursor on `server` and `cmd+B`/Navigate->"Declaration or Usages".  This should open a file named something like `python3.8/http/server.py`.  This is a file included with python.  Jump to the end of the file and page up a little.  You will see the start of an if block same as earlier (line 1262 in python 3.8.5).
+Then, put the cursor on `server` and `cmd+B`/Navigate->"Declaration or Usages".  This should open a file named something like `python3.8/http/server.py`.  This is a file included with Python.  Jump to the end of the file and page up a little.  You will see the start of an if block same as earlier (line 1262 in Python 3.8.5).
 
 For this little customization, we are going to not accept any command line arguments.  For a more useful tool, you'd likely add in most of these.  Since this is just an example, I'm keeping it simple.
 
