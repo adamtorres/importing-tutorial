@@ -716,11 +716,40 @@ from http import server
 
 Then, put the cursor on `server` and (for PyCharm on OSX) press `⌘+B`/Navigate->"Declaration or Usages".  This should open a file named something like `python3.8/http/server.py`.  This is a file included with Python.  Jump to the end of the file and page up a little.  You will see the start of an if block same as earlier (line 1262 in Python 3.8.5).
 
+```python
+if __name__ == '__main__':
+    import argparse
+
+    parser = argparse.ArgumentParser()
+```
+
 For this little customization, we are going to not accept any command line arguments.  For a more useful tool, you'd likely add in most of these.  Since this is just an example, I'm keeping it simple.
 
 The important bits are seeing that it is using the class `SimpleHTTPRequestHandler` on line 1282 and calling the `test` function on 1294.  The `DualStackServer` defined on 1286 is not familiar to me since the last time I've done this.  Just means a little more copy/paste to do.
 
-The minimal amount of copied code is in `minimal_custom_http.py`.  The call to `test`, class definition `DualStackServer`, and a couple imports were all that needed to be copied.  By getting rid of the command line options, the address and port needed to be hard coded.
+```
+1282:        handler_class = partial(SimpleHTTPRequestHandler,
+1283:                                directory=args.directory)
+1284:
+1285:    # ensure dual-stack is not disabled; ref #38907
+1286:    class DualStackServer(ThreadingHTTPServer):
+1287:        def server_bind(self):
+```
+
+The minimal amount of copied code is in `minimal_custom_http.py`.  The call to `test` from the bottom of `server.py`, the class definition of `DualStackServer`, and a couple imports (as seen by the angry red underline in PyCharm) were all that needed to be copied.  By getting rid of the command line options, the address and port needed to be hard coded.  If you now run the `minimal_custom_http.py`, you will have a simple HTTP server that responds to your system's IP address at port 8000.  Or from your system at [localhost:8000](http://localhost:8000/).  The command output will be similar to:
+
+```
+python minimal_custom_http.py
+Serving HTTP on 0.0.0.0 port 8000 (http://0.0.0.0:8000/) ...
+127.0.0.1 - - [18/Sep/2020 15:23:24] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [18/Sep/2020 15:23:34] "GET /first.py HTTP/1.1" 200 -
+192.168.1.5 - - [18/Sep/2020 15:23:37] "GET / HTTP/1.1" 200 -
+192.168.1.5 - - [18/Sep/2020 15:23:37] code 404, message File not found
+192.168.1.5 - - [18/Sep/2020 15:23:37] "GET /favicon.ico HTTP/1.1" 404 -
+192.168.1.5 - - [18/Sep/2020 15:23:45] "GET /sibling_first.py HTTP/1.1" 200 -
+```
+
+The above shows the server starting, a local browser getting the listing and viewing a file, and a remote browser also getting the listing and viewing a file.
 
 I got a little carried away with this example.  The `BogusHTTPRequestHandler` class ended up uglier than I wanted.  I believe what I had done on a previous customization was focused in the translate_path function which translates a url into a local file path.  I made it so certain urls were translated differently.  In this convoluted and overly complex example, I made one specific file show custom text instead of the file content.
 This does work.  But it doesn't have much at all to do with the goal of this doc.
