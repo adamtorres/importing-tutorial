@@ -699,7 +699,7 @@ The goal is to have this command start with:
 $ python -m custom_http
 ```
 
-First step is to create the `custom_http.py` file and add in the bit that actually lets the `-m` option work.
+First step is to create the `custom_http.py` file and add in the bit that actually lets the `-m` option work.  There is a `custom_http.py` in this repo which has the final content.  If you are actually following along, just use a different name.
 
 ```python
 if __name__ == '__main__':
@@ -708,13 +708,13 @@ if __name__ == '__main__':
 
 Having just those two lines will have Python print "RUNNING!" when running the command show earlier.  The reason for the `if` block is so someone importing this file will not get the "RUNNING!" output.  In the more fleshed out example included, the block prevents a server from starting up when all that was wanted was an import.  The `__name__` special variable which generally tells the name of the current container.  For the script that directly executed, the value seems to be `__main__`.  For a script imported, the value will likely be the name of the script minus extension.
 
-A good place to start when you want to extend the functionality of something is the source code for that something.  To do so, we will use the "go to declaration" feature that is in most IDEs.  To do so, add the import line at the top of the file.
+A good place to start when you want to extend the functionality of something is the source code for that something.  To do so, we will use the "go to declaration" feature that is in most IDEs.  Add the following import line at the top of the file.
 
 ```python
 from http import server
 ```
 
-Then, put the cursor on `server` and `cmd+B`/Navigate->"Declaration or Usages".  This should open a file named something like `python3.8/http/server.py`.  This is a file included with Python.  Jump to the end of the file and page up a little.  You will see the start of an if block same as earlier (line 1262 in Python 3.8.5).
+Then, put the cursor on `server` and (for PyCharm on OSX) press `⌘+B`/Navigate->"Declaration or Usages".  This should open a file named something like `python3.8/http/server.py`.  This is a file included with Python.  Jump to the end of the file and page up a little.  You will see the start of an if block same as earlier (line 1262 in Python 3.8.5).
 
 For this little customization, we are going to not accept any command line arguments.  For a more useful tool, you'd likely add in most of these.  Since this is just an example, I'm keeping it simple.
 
