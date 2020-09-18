@@ -7,22 +7,24 @@ The point is, having all code in one monolithic source file is not the best rout
 
 ## Table of Contents
 
- * Terminology
- * Initial Setup From Scratch
- * Starting up
- * Getting Help From Python
- * Namespaces
- * Importing builtins
- * Importing your file
- * Importing sibling file from your file
- * Circular imports
- * Adding directory structures
- * Running a module - http
- * Building your own runnable module - custom http?
+ * [Initial Setup From Scratch](#initial-setup-from-scratch)
+ * [Starting up](#starting-up)
+ * [Getting Help From Python](#getting-help-from-python)
+ * [Namespaces](#namespaces)
+ * [Importing builtins](#importing-builtins)
+ * [Importing your file](#importing-your-file)
+   * [The dict Object](#the-dict-object)
+   * [Square Brackets](#square-brackets)
+   * [String Formatting](#string-formatting)
+ * [Importing sibling file from your file](#importing-sibling-file-from-your-file)
+ * [Circular imports](#circular-imports)
+ * [Adding directory structures](#adding-directory-structures)
+ * [Running a module](#running-a-module)
+ * [Building your own runnable module](#building-your-own-runnable-module)
 
 ----
 
-## Terminology
+# Terminology
 
 I tend to use "module" and "package" interchangeably and for possibly a variety of things.  The loose definition I use is "a grouping of functions/classes/variables/objects".  This can be a single file or a folder structure that has lots of files.  In general, I'll use "module" more often for the individual file and large set of folders while reserving "package" for a large set of folders.
 Just now looked up the proper definition for [pacakge](https://docs.python.org/3/glossary.html#term-package) and [module](https://docs.python.org/3/glossary.html#term-module).  Seems a module is as I defined it above while a package is "\[t]echnically, a package is a Python module with an \_\_path__ attribute."
@@ -31,7 +33,7 @@ A term not covered in the documentation linked earlier is "style guide".  Think 
 
 ----
 
-## Initial Setup From Scratch
+# Initial Setup From Scratch
 
 Create the project folder and change into it.
 
@@ -59,7 +61,7 @@ This assumes a few things.  You have `pyenv` and `pyenv-virtualenv` installed, P
 
 ----
 
-## Starting Up
+# Starting Up
 
 Next, start the interactive interpreter.
 
@@ -84,7 +86,7 @@ The `>>>` will not be included in examples unless for clarity when commands and 
 
 ----
 
-## Getting Help From Python
+# Getting Help From Python
 
 Python includes some helper functions that are most useful on the interactive prompt.  It even reminds you of one of the functions on the 3rd line in the output when starting the interactive prompt.  The `help` function will show the help for the specified function or start an interactive help dialog when nothing is specified.
 
@@ -155,7 +157,9 @@ help('modules')
 
 Note that the term is in quotes.  Python does not care about single or double quotes most of the time so long as there are quotes.  Google "style guide" for reasons other people care.  The 'topics' listing is nice as it somewhat covers the goal of this doc under "IMPORTING" and "NAMESPACES".
 
-## Namespaces
+----
+
+# Namespaces
 
 Quotes from https://martinfowler.com/bliki/TwoHardThings.html
 
@@ -183,7 +187,9 @@ For python's built-in help on namespaces, see:
 help('NAMESPACES')
 ```
 
-## Importing builtins
+----
+
+# Importing builtins
 
 A "builtin" is just some code that is included with python by default - it is "built in".  There's actually a builtins.py in python.  To see a list of the available modules you can import without having to pip install anything, use the help function mentioned earlier.
 
@@ -214,7 +220,37 @@ Example time.  Let's import `time` so we can get some `sleep`.
 import time
 ```
 
-Whew.  That was difficult.  We need some rest after that much work.  There's a `sleep` function in the `time` module that will let use rest for a bit.  But what kind of argument does it take?  Is it seconds or milliseconds?  Integer or decimal?  Call help to find out.
+Whew.  That was difficult.  We need some rest after that much work.  There's a `sleep` function in the `time` module that will let use rest for a bit.  But what if you do not know which function you needed?  You could either call help on the module, `help(time)`, or get a listing of the available functions, classes, and objects within the module.
+
+\<aside><br />
+I just noticed something odd.  On the command line, `ls` is used to get a listing of contents.  But in python, `dir` is used which is the same command Windows/DOS uses to get a listing of contents.  Anyways...<br />
+\</aside>
+
+Use the `dir()` function to get the list.
+
+```
+dir(time)
+```
+
+And the output:
+
+```
+['CLOCK_MONOTONIC', 'CLOCK_MONOTONIC_RAW', 'CLOCK_PROCESS_CPUTIME_ID', 'CLOCK_REALTIME',
+ 'CLOCK_THREAD_CPUTIME_ID', 'CLOCK_UPTIME_RAW', '_STRUCT_TM_ITEMS', '__doc__', '__loader__',
+ '__name__', '__package__', '__spec__', 'altzone', 'asctime', 'clock_getres', 'clock_gettime',
+ 'clock_gettime_ns', 'clock_settime', 'clock_settime_ns', 'ctime', 'daylight', 'get_clock_info',
+ 'gmtime', 'localtime', 'mktime', 'monotonic', 'monotonic_ns', 'perf_counter', 'perf_counter_ns',
+ 'process_time', 'process_time_ns', 'sleep', 'strftime', 'strptime', 'struct_time', 'thread_time',
+ 'thread_time_ns', 'time', 'time_ns', 'timezone', 'tzname', 'tzset']
+```
+
+The output is an object of type "list" of strings.  The sorting is alphabetical keeping in mind that all capital terms come before all lowercase terms and underscored terms are between the two groups.  Most of the time, you will be wanting something that starts with a lowercase letter so you can skip over the first two groups.  The general convention is all caps for constants or module-level variables, classes get initial caps and no underscores, functions and other variables get all lower with underscores between words.  As with any general convention, there are exceptions all over the place.
+
+When I'm looking for something and don't feel like Googling it, I'll get the listing and poke at anything that looks promising.  In this case, `sleep` is the only function that looks like it would cause a delay.
+
+As an alternative, you could browse the complete help for the module by using the module name without any function/class included - `help(time)`.  This will pop up a longer doc that is made up of the content you would see if you called help on each item in the `dir(time)` output.  It does have a little extra as it is module-level help, though.
+
+Ok, we found the function that would add a delay but what kind of argument does it take?  Is it seconds or milliseconds?  Integer or decimal?  Call help to find out.
 
 ```
 help(time.sleep)
@@ -248,37 +284,13 @@ sys	0m0.051s
 
 The overhead run took 0.138 seconds and the sleep run took 3.278 seconds.  That actually works out to exactly 3.14 seconds for the `time.sleep` command.  This doesn't always happen as the overhead depends on what else is going on in the os.
 
-If you did not know which function you needed, you could either call help on the module, `help(time)`, or get a listing of the available functions, classes, and objects within the module.  I just noticed something odd.  On the command line, `ls` is used to get a listing of contents.  But in python, `dir` is used which is the same command Windows/DOS uses to get a listing of contents.  Anyways... Use the `dir()` function to get the list.
-
-```
-dir(time)
-```
-
-And the output:
-
-```
-['CLOCK_MONOTONIC', 'CLOCK_MONOTONIC_RAW', 'CLOCK_PROCESS_CPUTIME_ID', 'CLOCK_REALTIME',
- 'CLOCK_THREAD_CPUTIME_ID', 'CLOCK_UPTIME_RAW', '_STRUCT_TM_ITEMS', '__doc__', '__loader__',
- '__name__', '__package__', '__spec__', 'altzone', 'asctime', 'clock_getres', 'clock_gettime',
- 'clock_gettime_ns', 'clock_settime', 'clock_settime_ns', 'ctime', 'daylight', 'get_clock_info',
- 'gmtime', 'localtime', 'mktime', 'monotonic', 'monotonic_ns', 'perf_counter', 'perf_counter_ns',
- 'process_time', 'process_time_ns', 'sleep', 'strftime', 'strptime', 'struct_time', 'thread_time',
- 'thread_time_ns', 'time', 'time_ns', 'timezone', 'tzname', 'tzset']
-```
-
-The output is an object of type "list" of strings.  The sorting is alphabetical keeping in mind that all capital terms come before all lowercase terms and underscored terms are between the two groups.  Most of the time, you will be wanting something that starts with a lowercase letter so you can skip over the first two groups.  The general convention is all caps for constants or module-level variables, classes get initial caps and no underscores, functions and other variables get all lower with underscores between words.  As with any general convention, there are exceptions all over the place.
-
-When I'm looking for something and don't feel like Googling it, I'll get the listing and poke at anything that looks promising.  In this case, `sleep` is the only function that looks like it would cause a delay.
-
-As an alternative, you could browse the complete help for the module by using the module name without any function/class included - `help(time)`.  This will pop up a longer doc that is made up of the content you would see if you called help on each item in the `dir(time)` output.  It does have a little extra as it is module-level help, though.
+----
 
 # Importing Your File
 
 Now, lets say you've created a script and want to test a function within the script.  You either need to set it up so it calls just what you want when executed as `python your_script.py` or you can import the script in the interactive prompt and call the function directly.
 
-Importing a file actually executes the file.  To see this, move the repo to the `ex1_importing_from_file` tag.  There should one python file named `first.py`.
-
-Running the script as `python first.py` will have the following output.
+Importing a file actually executes the file.  Running the script as `python first.py` will have the following output.
 
 ```
 This print is not inside of a function.
@@ -292,7 +304,7 @@ This print is not inside of a function.
 >>>
 ```
 
-Everything inside the file was executed when it was imported.  That doesn't mean the `print` function within the `hello` function was called as its output is not seen.  Instead, the `def hello(...` block was executed which defines the `hello` function but does not call it.  That means that you can now call `hello`.
+Everything inside the file was executed when it was imported.  That doesn't mean the `print` function within the `hello` function was called as its output is not seen.  Instead, the `def hello(...` block was executed which _defines_ the `hello` function but does not _call_ it.  That means that you can now call `hello`.
 
 ```
 >>> first.hello('the arg')
@@ -307,7 +319,26 @@ Because of how it was imported, you needed to specify the namespace.  You can ch
 Hello.  You passed in bob.
 ```
 
-Importing using `from` means you need to be careful of other imports using the same name.  As an example, switch the repo to the `ex2_import_from_second_file` tag.  There will now be two python files.  Both declare a function named `generic_func`.  If you import one and then the other, the second import will essentially overwrite the first.
+When using the `from` style of import, you either need to specify each item you want imported or use the wildcard, `*`.  The wildcard will import anything in the given module or will be limited to what is in the `__all__` variable if it exists.  In `first.py`, there is an `__all__` which only lists two functions.  Here is the output of `dir()` showing what is getting imported each time.  The `[i for i in dir() if not i.startswith('_')]` bit is a "list comprehensions" which is a fancy way of saying a list is being built in one statement.  It isn't part of the topic of this doc and used here only to clarify the output.
+
+With the `__all__` line:
+```
+$ python -c "from first import *; print([i for i in dir() if not i.startswith('_')])"
+This print is not inside of a function.
+['generic_func', 'hello']
+```
+
+Without the `__all__` line:
+```
+$ python -c "from first import *; print([i for i in dir() if not i.startswith('_')])"
+This print is not inside of a function.
+['dict_func_example', 'dict_func_example_a', 'dict_func_example_b', 'dict_func_example_c', 
+ 'dict_func_example_default', 'generic_func', 'hello', 'not_using_dict_func_example']
+```
+
+Personally, I stay away from wildcard imports.  It just feels unsafe.  If names of imported items are duplicated, conflicts will happen.  Not all conflicts will be immediately noticeable.  A function could be overwritten and slightly work if it is similar enough.
+
+Importing using `from` means you need to be careful of other imports using the same name.  For the next example, the `second.py` file will also be used.  Both declare a function named `generic_func`.  If you import one and then the other, the second import will essentially overwrite the first.
 
 ```
 >>> from first import generic_func
@@ -318,9 +349,9 @@ generic_func() from first
 generic_func() from second
 ```
 
-This shows an important concept in how python deals with functions.  "Everything is an object" is a phrase I've heard somewhere but don't feel like looking up at the moment.  When a function is declared (the `def func_name()` line), what is happening is that an object named `func_name` is created with the value being the function body.  When the first `from/import` line is executed, the object `generic_func` is created and assigned the value as defined in `first.py`.  When the second `from/import` is executed, the same existing `generic_func` object is overwritten and assigned the value from `second.py`.
+This shows an important concept in how python deals with functions.  "Everything is an object" is a phrase I've heard somewhere but don't feel like looking up at the moment.  When a function is declared (the `def func_name()` line), what is happening is that an object named `func_name` is created with the value being the function body.  When the first `from/import` line is executed, the object `generic_func` is created and assigned the value as defined in `first.py`.  When the second `from/import` is executed, the existing `generic_func` object is overwritten and assigned the value from `second.py`.
 
-To further show how functions are objects, you can assign functions to variables.  One pattern I've used and seen used numerous times is to create/build a dict where the values are all functions.  Update the repo to `ex3_dict_example_funcs` for this example.  The functions which start as `dict_func_example` in `first.py` show a basic example of how this works.
+To further show how functions are objects, you can assign functions to variables.  One pattern I've used and seen used numerous times is to create/build a dict where the values are all functions.  The functions which start as `dict_func_example` in `first.py` show a basic example of how this works.
 
 ```
 >>> first.dict_func_example('absolute')
@@ -335,7 +366,7 @@ no function matches. hello
 
 The general idea is to use some key to determine which function needs to be called.  If you are familiar with `switch` or `case` statements in other languages, this works in a slightly similar manner.
 
-Side tracking to cover some details used in this example.
+Side tracking a little to cover some details used in this example.
 
 ## The dict object
 A dict is a dictionary object.  It is made up of key/value pairs.  The keys can be any mix of "hashable types".  In general, strings, numbers, and tuples of strings and numbers are all I've used as keys.  The values can be anything from other strings and numbers to other dicts, functions, or objects.
@@ -556,7 +587,7 @@ Given all that, I've rarely used it.  So the above few paragraphs are somewhat p
 * `__init__.py` is needed in every folder of a package.
 
 
-# Running a module - http
+# Running a module
 
 Not sure how this is related to importing but I added it to the list earlier so here we go.
 
@@ -568,7 +599,7 @@ python -m http.server
 
 Starting this in the folder with the example files will allow anyone on the network to see the files.  The generated web page will be a very basic file listing allowing the user to click on the files to see their content.  I've mainly used this to test some simple static pages - mostly css/javascript debugging.  There are further options to limit the address and port used and for specifying the hosted directory.
 
-# Building your own runnable module - custom http?
+# Building your own runnable module
 
 Lets say you want to allow a user to run some example code directly from the module.  In this completely made up example, we will add something to the `http.server` just so there's a lot of the interactivity already built in.
 

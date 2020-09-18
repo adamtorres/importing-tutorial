@@ -45,3 +45,6 @@ def not_using_dict_func_example(arg):
         dict_func_example_c(arg)
     else:
         dict_func_example_default(arg)
+
+
+__all__ = ['hello', 'generic_func']
