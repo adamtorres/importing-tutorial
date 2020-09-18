@@ -328,7 +328,7 @@ Because of how it was imported, you needed to specify the namespace when calling
 Hello.  You passed in bob.
 ```
 
-When using the `from` style of import, you either need to specify each item you want imported or use the wildcard, `*`.  The wildcard will import anything in the given module or will be limited to what is in the `__all__` variable if it exists.  In `first.py`, there is an `__all__` which only lists two functions.  Here is the output of `dir()` showing what is getting imported each time.  The `[i for i in dir() if not i.startswith('_')]` bit is a "list comprehensions" which is a fancy way of saying a list is being built in one statement.  It isn't part of the topic of this doc and used here only to clarify the output.
+When using the `from` style of import, you either need to specify each item you want imported or use the wildcard, `*`.  The wildcard will import anything in the given module or will be limited to what is in the `__all__` variable if it exists.  In `first.py`, there is an `__all__` which only lists two functions.  Here is the output of `dir()` showing what is getting imported each time.  The `[i for i in dir() if not i.startswith('_')]` bit is a "list comprehension" which is a fancy way of saying a list is being built dynamically.  It isn't part of the topic of this doc and used here only to clarify the output.
 
 With the `__all__` line:
 ```
@@ -358,6 +358,8 @@ generic_func() from first
 >>> generic_func()
 generic_func() from second
 ```
+
+Notice, also, that Python did not warn you that something was being overwritten.  Python will happily allow you to [shoot yourself in the foot](http://www.toodarkpark.org/computers/humor/shoot-self-in-foot.html) in many creative ways.
 
 This shows an important concept in how Python deals with functions.  "Everything is an object" is a phrase I've heard somewhere but don't feel like looking up at the moment.  When a function is declared (the `def func_name()` line), what is happening is that an object named `func_name` is created with the value being the function body.  When the first `from/import` line is executed, the object `generic_func` is created and assigned the value as defined in `first.py`.  When the second `from/import` is executed, the existing `generic_func` object is overwritten and assigned the value from `second.py`.
 
