@@ -679,15 +679,15 @@ Given all that, I've rarely used it.  So the above few paragraphs are somewhat p
 
 # Running a module
 
-Not sure how this is related to importing but I added it to the list earlier so here we go.
+Not sure how this is related to importing but I added it to the table of contents earlier so here we go.
 
-There is a command line option on Python which allows running a module directly.  Some of the builtin modules include such for whatever reasons.  One that I've used numerous times is in `http.server`.  This will start a simple HTTP server in the current folder.  This server doesn't do much other than serving up the files in the folder.  It can do some cgi (running scripts/executables) but I've not had it do so.
+There is a command line option on Python which allows running a module directly.  Some of the builtin modules include such for whatever reasons.  One that I've used numerous times is in `http.server`.  This will start a simple HTTP server in the current folder.  This server doesn't do much other than serving up the files in the folder.  It can do some cgi (running scripts/executables) but I've not had it do so and definitely would not trust it for anything public-facing.
 
 ```shell script
 $ python -m http.server
 ```
 
-Starting this in the folder with the example files will allow anyone on the network to see the files.  The generated web page will be a very basic file listing allowing the user to click on the files to see their content.  I've mainly used this to test some simple static pages - mostly css/javascript debugging.  There are further options to limit the address and port used and for specifying the hosted directory.
+Starting this in the folder with the example files will allow anyone on the network to see the files.  The generated web page will be a very basic file listing allowing the user to click on the files to see their content.  I've mainly used this to test some simple static pages - mostly css/javascript debugging.  There are further options to specify the address, port used, and the hosted directory.
 
 # Building your own runnable module
 
