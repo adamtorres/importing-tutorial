@@ -542,6 +542,13 @@ $ python -c "import structure; structure.run_all()"
 
 This just imports the first folder in the example and calls a function.  That function imports files from other folders and calls various functions.  The output is a pile of print statements that show the actual order the various files are imported.  Also serves as another example that the files are actually executed when imported.
 
+The starting/ending print statements are another example of f-strings.  They also show another special variable called `__file__`.  That variable holds the absolute path to the current file.  The mess after the variable replaces the path up until the root of the repo.
+```
+print(f"{__file__.replace(str(pathlib.Path('.').resolve()), '')} starting")
+```
+
+The output of running the `python -c ...` command is:
+
 ```
 /structure/__init__.py starting
 /structure/io/__init__.py starting
