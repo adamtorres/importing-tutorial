@@ -62,6 +62,18 @@ pyenv local importing_env
 
 This assumes a few things.  You have `pyenv` and `pyenv-virtualenv` installed, and Python 3.8.5 is installed via `pyenv install 3.8.5`.
 
+As a general rule, I upgrade `pip` once a new virtual environment is created.  It is "on the list" to figure out how to keep the source environment updated so this wouldn't be necessary.
+
+```
+pip install --upgrade pip
+```
+
+## Summary
+
+ * Cloning can create a new folder or save to the current folder.
+ * Cloning does not set up a local Python virtual environment.
+ * Setting up the virtual environment is done with two commands via `pyenv`.
+
 ----
 
 # Starting Up
@@ -84,6 +96,10 @@ Type "help", "copyright", "credits" or "license" for more information.
 The `>>>` is the prompt waiting for commands.  You can do most things here that you can do in a script.  It is just a bit more difficult as if you were creating a long function and made a typo in a previous line, you cannot just scroll up and fix it.  Example, say you are creating a 4 line function and you make a typo on the 3rd line but don't catch it until you pressed enter to start the 4th line.  You'd have to redo all of the lines and remember to fix the typo when you get to the 3rd line.  On the plus side, pressing up arrow generally recalls previous lines.  While I wouldn't want to write a full application using this interface, it is handy for quick debugging/testing of isolated functions.  Copy/paste also works well - having a text doc with a variety of statements/functions to copy and paste into the terminal.
 
 Of course, if something is repeated often enough, it would probably be better to just make a script for it.  Even if it is in a tmp folder and not committed to the repo.
+
+## Summary
+
+ * The interactive interpreter is a fun sandbox.
 
 ----
 
@@ -156,6 +172,10 @@ As a shortcut, you can include the terms in the initial `help()` call.  For exam
 
 Note that the term is in quotes.  For strings, Python does not care about single or double quotes most of the time so long as there are quotes.  Google "style guide" for reasons other people care.  The 'topics' listing is nice as it somewhat covers the goal of this doc under "IMPORTING" and "NAMESPACES".
 
+## Summary
+
+ * The builtin `help()` is useful for quick lookups or for when the internet is unavailable.
+
 ----
 
 # Namespaces
@@ -189,6 +209,10 @@ For Python's built-in help on namespaces, see:
 ```python
 >>> help('NAMESPACES')
 ```
+
+## Summary
+
+ * Namespaces keeps things organized.
 
 ----
 
@@ -295,11 +319,36 @@ sys	0m0.051s
 
 The overhead run took 0.138 seconds and the sleep run took 3.278 seconds.  That actually works out to exactly 3.14 seconds for the `time.sleep` command.  This doesn't always happen as the overhead depends on what else is going on in the os.  I was honestly surprised it worked out so neatly.  On a second run of the empty string, the time was not the same.
 
+## Summary
+
+ * Importing a complete module gives access to everything in it.
+ * Importing a specific object from a module still executes all the code in the module.
+ * dir(obj) returns a listing of the attributes on the object.
+
 ----
 
 # Importing Your File
 
 Now, lets say you've created a script and want to test a function within the script.  You either need to set it up so it calls just what you want when executed as `python your_script.py` or you can import the script in the interactive prompt and call the function directly.
+
+The name of the script is important in that only letters and underscores.  As an example, the included file `file-with-hyphens.py` cannot easily be imported.  You can try from the interactive prompt.  The following tries to do so as normal, with quotes, and with underscores.
+
+```
+>>> import file-with-hyphens
+  File "<stdin>", line 1
+    import file-with-hyphens
+               ^
+SyntaxError: invalid syntax
+>>> import "file-with-hyphens"
+  File "<stdin>", line 1
+    import "file-with-hyphens"
+           ^
+SyntaxError: invalid syntax
+>>> import file_with_hyphens
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+ModuleNotFoundError: No module named 'file_with_hyphens'
+```
 
 Importing a file actually executes the file.  The `first.py` script has a `print` statement outside of any defined functions.  Running the script as `python first.py` will have the following output.
 
@@ -479,6 +528,18 @@ Not sure how I feel about this next example, but you can modify the module in me
 hi
 ```
 
+## Summary
+
+ * Only use letters and underscores in filenames so importing is easy.
+ * Importing a file actually executes the file so be careful what is not in classes/functions/etc.
+ * Importing reusing a name will overwrite that name in the current namespace.
+ * Wildcard imports are not always predictable.
+ * Functions are objects, too, and can be assigned to variables.
+ * Dictionaries are not just for shelves.
+ * Square brackets and slicing are fun pass-times.
+ * String formatting can be done multiple ways.
+ * Renaming imported modules/objects can be helpful to avoid conflicts.
+
 # Importing Sibling File From Your File
 
 Importing from one file to another in the same directory is done just as any other import.  Use the filename without the extension.  For example, in `sibling_first.py`, you would import `sibling_second.py` as, `import sibling_second`.  This would import the namespace `sibling_second` as the contents of `sibling_second.py`.  To access any of the items in `sibling_second`, the namespace needs to be used.  Functions of the same name would not conflict because of how the import was worded.  If the import was worded as `from sibling_second import same_name_func`, just the one function would be imported.
@@ -513,6 +574,9 @@ Finally, the "not-in-a-function" print statement from `sibling_first` is execute
 
 Usually, you would pay close enough attention to not import an object just to create one of the same name.  Pycharm does not seem to flag this as I thought it would.  It does flag calling a function before it is defined, so that is one error that should be trivial to avoid.
 
+## Summary
+
+ * Importing a sibling file works pretty much the same as importing from the interactive prompt in the previous section.
 
 # Circular imports
 This is when one file imports another file which then imports another file which imports another eventually importing the first file again.  Python will flag this as some error as shown below with a "most likely" note.  Sometimes it will be ImportError and other times it will be AttributeError.  To see this output, run `python circular_a.py`.
@@ -532,6 +596,10 @@ AttributeError: partially initialized module 'circular_b' has no attribute 'func
 ```
 
 This tends to pop up mostly when using frameworks.  There have been times that I'd try to use some neat function I wrote in one module from another module only to find out that the framework imported things such that it caused problems.  Generally, it means some functions/classes/objects are not in the ideal locations to follow the convention set up by the framework.  Thankfully, it doesn't often occur.  It just happens often enough I felt an example was warranted.
+
+## Summary
+
+ * Bad stuff.  Avoid it.
 
 # Adding directory structures
 
@@ -676,7 +744,6 @@ Given all that, I've rarely used it.  So the above few paragraphs are somewhat p
 * Folders allow grouping files into logical segments.  The deeper the folders, the more specialized.   
 * `__init__.py` is needed in every folder of a package.
 
-
 # Running a module
 
 Not sure how this is related to importing but I added it to the table of contents earlier so here we go.
@@ -688,6 +755,10 @@ $ python -m http.server
 ```
 
 Starting this in the folder with the example files will allow anyone on the network to see the files.  The generated web page will be a very basic file listing allowing the user to click on the files to see their content.  I've mainly used this to test some simple static pages - mostly css/javascript debugging.  There are further options to specify the address, port used, and the hosted directory.
+
+## Summary
+
+ * Running a module as a script allows for including example/basic usage as active code.
 
 # Building your own runnable module
 
@@ -754,3 +825,8 @@ The above shows the server starting, a local browser getting the listing and vie
 I got a little carried away with this example.  The `BogusHTTPRequestHandler` class ended up uglier than I wanted.  I believe what I had done on a previous customization was focused in the `translate_path` function which translates a url into a local file path.  I made it so certain urls were translated differently.  In this convoluted and overly complex example, I made one specific file show custom text instead of the actual file content.
 
 This does work.  But it doesn't have much at all to do with the goal of this doc.
+
+## Summary
+
+ * Not a great example of class inheritance.
+ * No real magic to make a module executable, just an if block checking the `__name__` variable.
