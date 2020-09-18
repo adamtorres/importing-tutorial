@@ -40,14 +40,14 @@ A term not covered in the documentation linked earlier is "style guide".  Think 
 
 Create the project folder and change into it.
 
-```
+```shell script
 mkdir importing
 cd importing
 ```
 
 Clone the repo into the current folder.  Note the ` .` at the end of the command.  Without it, a new folder will be created using the name of the repo.  With, it will use the stated folder (the current one in this case) as the root of the repo.  The destination folder needs to be empty for git to clone successfully.
 
-```
+```shell script
 git clone https://github.com/adamtorres/importing-tutorial .
 ```
 
@@ -55,7 +55,7 @@ Pretty much the only reason to do the cloning as above (with a ` .`) is so the f
 
 Creating or cloning the repo will not create a functional virtual environment to run the examples.  The following commands use `pyenv` to create a virtual environment and then set the new virtual environment to be the active one for the current folder.
 
-```
+```shell script
 pyenv virtualenv --copies 3.8.5 importing_env
 pyenv local importing_env
 ```
@@ -68,7 +68,7 @@ This assumes a few things.  You have `pyenv` and `pyenv-virtualenv` installed, a
 
 Next, start the interactive interpreter.
 
-```
+```shell script
 python
 ```
 
@@ -92,7 +92,7 @@ Of course, if something is repeated often enough, it would probably be better to
 Python includes some helper functions that are most useful on the interactive prompt.  It even reminds you of one of the functions on the 3rd line in the output when starting the interactive prompt.  The `help` function will show the help for the specified function or start an interactive help dialog when nothing is specified.
 
 As an example, show some help on the `print` function.
-```
+```python
 >>> help(print)
 ```
 
@@ -108,7 +108,7 @@ From the help shown above (the actual output details the arguments), it can be s
 
 For a class, the output is a little different.  This example calls help on itself.
 
-```
+```python
 >>> help(help)
 ```
 
@@ -135,7 +135,7 @@ For now, just note the difference in how the help is displayed between a functio
 
 That's all well and good if you know what you want help on.  Calling `help()` without any arguments will start the interactive help prompt where you can browse some of the internals.
 
-```
+```python
 >>> help()
 ```
 
@@ -150,7 +150,7 @@ Also note the prompt has changed from `>>>` to `help>`.  From here, you can type
 
 As a shortcut, you can include the terms in the initial `help()` call.  For example, to see the listing of modules without having to start the interactive bit, add `'modules'` to the call.
 
-```
+```python
 >>> help('modules')
 ```
 
@@ -185,7 +185,8 @@ Personally, I prefer to import to the namespace level when I think about it (mea
 Both directories and file names affect the namespaces that Python uses.  As with most things, there are ways around that.  But for now, just know that if you have a file called `billy.py`, Python will see things within it as `billy.function_name`.
 
 For Python's built-in help on namespaces, see:
-```
+
+```python
 >>> help('NAMESPACES')
 ```
 
@@ -195,7 +196,7 @@ For Python's built-in help on namespaces, see:
 
 A "builtin" is just some code that is included with Python by default - it is "built in".  There's actually a builtins.py in Python.  To see a list of the available modules you can import without having to pip install anything, use the help function mentioned earlier.
 
-```
+```python
 >>> help('modules')
 ``` 
 
@@ -218,7 +219,7 @@ _testcapi           ftplib              reprlib
 
 For a little insight into a general way to approach writing Python code, try:
 
-```
+```python
 >>> import this
 ```
 
@@ -226,7 +227,7 @@ The output is a nice little poem-like thing giving a decent summary on how to wr
 
 Example time.  Let's import `time` so we can get some `sleep`.
 
-```
+```python
 >>> import time
 ```
 
@@ -238,13 +239,13 @@ I just noticed something odd.  On the command line in Linux and OSX, `ls` is use
 
 Use the `dir()` function to get the list.
 
-```
+```python
 >>> dir(time)
 ```
 
 And the output:
 
-```
+```python
 ['CLOCK_MONOTONIC', 'CLOCK_MONOTONIC_RAW', 'CLOCK_PROCESS_CPUTIME_ID', 'CLOCK_REALTIME',
  'CLOCK_THREAD_CPUTIME_ID', 'CLOCK_UPTIME_RAW', '_STRUCT_TM_ITEMS', '__doc__', '__loader__',
  '__name__', '__package__', '__spec__', 'altzone', 'asctime', 'clock_getres', 'clock_gettime',
@@ -262,7 +263,7 @@ As an alternative, you could browse the complete help for the module by using th
 
 Ok, we found the function that would add a delay but what kind of argument does it take?  Is it seconds or milliseconds?  Integer or decimal?  Call help to find out.
 
-```
+```python
 >>> help(time.sleep)
 ```
 
@@ -278,7 +279,7 @@ This output shows it takes a single argument that is the number of seconds and c
 
 So to sleep for 3.14 seconds but also check to see how long it takes, we use the `time` command (non-Python) to time how long the full command takes.  Since there would be some overhead in starting up Python, we first run it with nothing and subtract that time from the sleep time.
 
-```
+```shell script
 $ time python -c ""
 
 real	0m0.138s
@@ -308,7 +309,7 @@ This print is not inside of a function.
 
 Now, go into the interactive prompt and import the script.  Note the extension is not included.  You will see a familiar line.
 
-```
+```python
 >>> import first
 This print is not inside of a function.
 ```
@@ -545,6 +546,7 @@ This just imports the first folder in the example and calls a function.  That fu
 The starting/ending print statements are another example of f-strings.  They also show another special variable called `__file__`.  That variable holds the absolute path to the current file.  The mess after the variable replaces the path up until the root of the repo.
 
 ```python
+import pathlib
 print(f"{__file__.replace(str(pathlib.Path('.').resolve()), '')} starting")
 ```
 
