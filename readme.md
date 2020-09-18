@@ -603,7 +603,7 @@ util commonly_useful_function
 run_all() ending
 ```
 
-Breaking the output into a few steps.  The first step is from the initial `import structure` statement.  All of the first lines that start with `/structure/` are from that one import.  Each of the files include starting and ending print statements.  Compare the prints from the file and socket folders.  (blank line added for clarity)
+Breaking the output into a few steps.  The first step is from the initial `import structure` statement.  All of the first lines that start with `/structure/` are caused by that one import.  Each of the files include starting and ending print statements.  Compare the prints from the file and socket folders.  (blank line added for clarity)
 
 ```
 /structure/io/file/__init__.py starting
@@ -622,7 +622,8 @@ Breaking the output into a few steps.  The first step is from the initial `impor
 ```
 
 While the import lines for the two folders is different, one imports the folder and the other imports specific files within, the main difference is in how the `__init__.py` file in each folder treats its siblings.  For `file`, the `__init__.py` imports the functions from the two sibling files.  In `socket`, the `__init__.py` does not import anything from its siblings.  Even though the import line in `structure.__init__.py` seems like it is skipping over the `__init__.py` in `socket`, it is still executing it.  The function in that `__init__.py` is not accessible, though.
-Because the `__init__.py` in `file` imports its siblings, the print statements in those files show up before the `__init__.py`'s ending print statement.  The "point of execution" follows along the various files when the statements are executed - it doesn't finish with one file completely and move on to the next.
+
+Because the `__init__.py` in `file` imports its siblings, the print statements in those files show up before the `__init__.py`'s ending print statement.  The "point of execution" follows along the various files when the statements are executed - it doesn't finish with one file completely and move on to the next.  This is what allows circular imports to happen.
 
 The next interesting bit is a function which has an import statement inside it.  The function in `util/__init__.py` has an import for the `util/general_func.py` file.  This import statement is not executed when the `__init__.py` is imported because it is within a function and the function was not executed; only defined.
 
@@ -663,7 +664,9 @@ good output
 ``` 
 
 One important bit to be aware of: reloading a module does not force a reload of any modules it imports.  In the above example, I made a change to the root `/structure/__init__.py` by adding a print statement after its import lines.  Note that the starting/ending print statements only has a single line between them this time whereas they had almost 20 lines before.  This is because the reload function only reloads what it is explicitly told to.
+
 Also, to be able to reload something, it needs to be imported as a file.  I've not found a way to reload a module that only had a few bits imported.  As in `from some_file import func`, the `some_file.py` has a function `func` imported but not the entire module.  Trying to reload `some_file` will result in "NameError: name 'some_file' is not defined" and trying it on `func` will result in "TypeError: reload() argument must be a module".  Trying `some_file.func` also results in a NameError.
+
 Given all that, I've rarely used it.  So the above few paragraphs are somewhat pointless.
 
 ## Summary
