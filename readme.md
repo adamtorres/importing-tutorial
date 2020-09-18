@@ -492,11 +492,17 @@ This comes from sibling_second.py
 ```
 
 First thing to note is order the not-in-a-function print statements executed.  Python runs a script line-by-line.  It doesn't even look at following lines before executing earlier lines.
+
 The first line in the file is importing `sibling_second.py`.  All lines in that file are executed which is seen by the output of the not-in-a-function print statement at the end of the file.  This means the second line in `sibling_first.py` would be able to access the `sibling_second` namespace.  Notice that the second import does not result in another not-in-a-function print statement from `sibling_second.py`.  Python is smart enough to know it already imported the file so reuses the bits in memory and just picks out the `same_name_func` from the `sibling_second` namespace and adds it to the current namespace.
+
 The try/except block is then run which shows the sequential nature of how a script is executed.  The function being called is defined in the file but it hasn't been defined yet.  This only applies to function calls outside of any function/class definition.  It is perfectly valid for a function to call another that is defined later in the same file.  The problem comes when a statement is executed that tries to execute something that isn't yet there.  A try/except block was used to show this in `sibling_first.py` so the execution would not be interrupted.
+
 The definition of the next couple of functions produce no output but create the functions in the current namespace.  
+
 The same function that was attempted in the try/except block is called again.  This time, it has been defined so it doesn't fail.  First, it calls the function from the current namespace and then from the `sibling_second` namespace.  Even though the second import line imports the function from that namespace into the current one, the output shows the function executed was the one from `sibling_first`.  This is because the definition of `same_name_func` in `sibling_first` came after the import and overwrote the definition in the current namespace.  If the second import line were moved to after the `def same_name_func():` block, the output would show the function from `sibling_second` was called.
+
 The second call to `same_name_func` explicitly uses the namespace in the call so there is no question which function to use.
+
 Finally, the not-in-a-function print statement from `sibling_first` is executed.
 
 Usually, you would pay close enough attention to not import an object just to create one of the same name.  Pycharm does not seem to flag this as I thought it would.  It does flag calling a function before it is defined, so that is one error that should be trivial to avoid.
