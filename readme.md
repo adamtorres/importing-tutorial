@@ -509,7 +509,7 @@ Usually, you would pay close enough attention to not import an object just to cr
 
 
 # Circular imports
-This is when one file imports another file which then imports another file which imports another eventually importing the first file again.  Python will flag this as an some error as shown below.  Sometimes it will be ImportError and other times it will be AttributeError.  To see this output, run `python circular_a.py`.
+This is when one file imports another file which then imports another file which imports another eventually importing the first file again.  Python will flag this as some error as shown below with a "most likely" note.  Sometimes it will be ImportError and other times it will be AttributeError.  To see this output, run `python circular_a.py`.
 
 ```
 This is a
@@ -531,10 +531,10 @@ This tends to pop up mostly when using frameworks.  There have been times that I
 
 So far, the files have been in a flat namespace.  Everything has been at one level.  For sufficiently large projects, there would be groupings that would make sense to isolate.  Such as a group of modules all related to database access, another couple of groups related to file access and socket communication, and a final group for general utility functions.  At the first level within a group, the functions/classes/etc would likely be quite generic for the topic.  Going another folder level in would bring in some more specialized objects.  Bad car analogy: 1st level in would be a book on automobiles.  Next level in would be a book on cars (or trucks, vans, SUVs).  Next level in would be a book on luxury cars (or racing, cheap, off-road).
 
-Python uses a file named `__init__.py` to let it know the folder is supposed to be treated as a package.  This allows you to have folders in your project that Python knows it doesn't have to worry about.  Many times, these files will be empty and just there to make Python happy.  Every folder in a package's structure needs to have its own `__init__.py` file.
+Python uses a file named `__init__.py` to let it know the folder is supposed to be treated as part of the module.  This allows you to have folders in your project that Python knows it doesn't have to worry about - they are inaccessible by `import` statements.  Many times, these files will be empty and just there to make Python happy.  Every folder in a module's structure needs to have its own `__init__.py` file.
 
 The example files for this section are in the `structure` folder.
-Quick new thing: running python with the `-c` option allows running a short script without a file and without dealing with the interactive prompt.  "Short", in this case, is only because typing a long script as a one-line command would be silly.
+Quick (not so) new thing: running `python` with the `-c` option allows running a short script without a file and without dealing with the interactive prompt.  "Short", in this case, is only because typing a long script as a one-line command would be silly.  Multiple lines are separated by `;`.
 
 ```
 $ python -c "import structure; structure.run_all()"
