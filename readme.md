@@ -397,7 +397,7 @@ We've already covered one use for assigning and retrieving values in a dict.  Sq
 
 For lists, strings, tuples, and sets, the square brackets take an integer as the key.  The first element is 0 and the count goes up by one from there.  In the example function, the first character of the argument is found by `arg[0]`.  The function makes no attempt to validate the argument so it can easily be broken by passing in any value that is not subscriptable.
 
-There's a whole pile of details not covered here.  Google "python list slicing" for more.
+There's a whole pile of details not covered here.  Google "python list slicing" for more or read [a dry definition](https://docs.python.org/3/glossary.html#term-slice).
 
 ## String Formatting
 One handy shortcut that has not been covered yet but already used is "f strings".  This is a relatively new feature which makes for some shorter lines.  The following print statements all produce the same output.
@@ -437,7 +437,7 @@ To pick the appropriate function, the first character of the variable `arg` is u
 
 Now that a function has been assigned to the variable `func`, it can be called as if we were calling it by name.
 
-This pattern is useful when <insert reasonable use-case here>.  An alternative to using this pattern is shown in `not_using_dict_func_example`.  This uses `if/elif/else` to pick and execute the appropriate function.  An advantage the dict pattern has is the dict could be generated at runtime while the `if/elif/else` is static.
+This pattern is useful when the functions to decide upon are dynamic.  Building a dict of ones valid for the incoming data can potentially make more sense than hard coding a pile of conditionals.  An alternative to using this pattern is shown in `not_using_dict_func_example`.  This uses `if/elif/else` to pick and execute the appropriate function.  An advantage the dict pattern has is the dict could be generated at runtime while the `if/elif/else` is static.
 
 ## Import Alias
 
@@ -449,7 +449,7 @@ Sometimes it would make life "better" to call an imported module/function/class 
 hi
 ```
 
-The import line itself cannot really be shortened but the module or function name can.
+The import line itself cannot really be shortened but the module or function name can so later uses in the code aren't quite so ugly.
 
 Renaming the function using the `from/import` style:
 ```
@@ -465,7 +465,7 @@ Renaming the module:
 hi
 ```
 
-Not sure how I feel about this, but you can modify the module in memory.  The change is not saved to disk.  This sets an alias for the module, then adds a variable in that module holding the same function body as the long-named function.  Note that the second line with the long function name does not have parenthesis, meaning it isn't calling the function.  Modifying a module not in your code is an example of "monkey patching".  That really is the name for it.  Google it.
+Not sure how I feel about this next example, but you can modify the module in memory.  The change is not saved to disk.  This sets an alias for the module, then adds a variable in that module holding the same function body as the long-named function.  Note that the second line with the long function name does not have parenthesis, meaning it isn't calling the function.  Modifying a module not in your code is an example of "monkey patching".  That really is the name for it.  Google it.  Or just read [the wiki](https://en.wikipedia.org/wiki/Monkey_patch).  I can only vaguely remember one time I did this in a production environment.  It was very early on in my Python experience so there was possibly a better way to accomplish the same goal but I didn't know better.
 ```
 >>> import really_long_module_name_that_should_really_not_be_allowed as blah
 >>> blah.say_hi = blah.example_function_that_also_has_a_really_long_name_that_should_also_not_be_allowed
