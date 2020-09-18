@@ -751,5 +751,6 @@ Serving HTTP on 0.0.0.0 port 8000 (http://0.0.0.0:8000/) ...
 
 The above shows the server starting, a local browser getting the listing and viewing a file, and a remote browser also getting the listing and viewing a file.
 
-I got a little carried away with this example.  The `BogusHTTPRequestHandler` class ended up uglier than I wanted.  I believe what I had done on a previous customization was focused in the translate_path function which translates a url into a local file path.  I made it so certain urls were translated differently.  In this convoluted and overly complex example, I made one specific file show custom text instead of the file content.
+I got a little carried away with this example.  The `BogusHTTPRequestHandler` class ended up uglier than I wanted.  I believe what I had done on a previous customization was focused in the `translate_path` function which translates a url into a local file path.  I made it so certain urls were translated differently.  In this convoluted and overly complex example, I made one specific file show custom text instead of the actual file content.
+
 This does work.  But it doesn't have much at all to do with the goal of this doc.
