@@ -51,16 +51,16 @@ Clone the repo into the current folder.  Note the ` .` at the end of the command
 git clone https://github.com/adamtorres/importing-tutorial .
 ```
 
-Pretty much the only reason to do the cloning as above (with a ` .`) is so the folder on your local system is named what you want rather than whatever is the repo name.  Were you to run the clone without the ` .`, a new folder named "importing-tutorial" would be created and the contents placed there.
+Pretty much the only reason to do the cloning as above (with a ` .`) is so the folder on your local system is named what you want rather than whatever is the repo name.  Were you to run the clone without the ` .`, a new folder named "importing-tutorial" would be created and the contents placed there.  It was done here as an example.
 
-Creating or cloning the repo will not create a functional virtual environment.  The following commands use `pyenv` to create a virtual environment and then set the new virtual environment to be the active one for the current folder.
+Creating or cloning the repo will not create a functional virtual environment to run the examples.  The following commands use `pyenv` to create a virtual environment and then set the new virtual environment to be the active one for the current folder.
 
 ```
 pyenv virtualenv --copies 3.8.5 importing_env
 pyenv local importing_env
 ```
 
-This assumes a few things.  You have `pyenv` and `pyenv-virtualenv` installed, Python 3.8.5 is installed via `pyenv install 3.8.5`.
+This assumes a few things.  You have `pyenv` and `pyenv-virtualenv` installed, and Python 3.8.5 is installed via `pyenv install 3.8.5`.
 
 ----
 
@@ -85,8 +85,6 @@ The `>>>` is the prompt waiting for commands.  You can do most things here that 
 
 Of course, if something is repeated often enough, it would probably be better to just make a script for it.  Even if it is in a tmp folder and not committed to the repo.
 
-The `>>>` will not be included in examples unless for clarity when commands and output are mixed.
-
 ----
 
 # Getting Help From Python
@@ -95,7 +93,7 @@ Python includes some helper functions that are most useful on the interactive pr
 
 As an example, show some help on the `print` function.
 ```
-help(print)
+>>> help(print)
 ```
 
 The output starts as:
@@ -111,7 +109,7 @@ From the help shown above (the actual output details the arguments), it can be s
 For a class, the output is a little different.  This example calls help on itself.
 
 ```
-help(help)
+>>> help(help)
 ```
 
 The output starts as:
@@ -138,7 +136,7 @@ For now, just note the difference in how the help is displayed between a functio
 That's all well and good if you know what you want help on.  Calling `help()` without any arguments will start the interactive help prompt where you can browse some of the internals.
 
 ```
-help()
+>>> help()
 ```
 
 The important bit in the initial output is this line: 
@@ -155,7 +153,7 @@ From here, you can type `modules`, `keywords`, etc and see a listing of such to 
 As a shortcut, you can include the terms in the initial `help()` call.  For example, to see the listing of modules without having to start the interactive bit, add `'modules'` to the call.
 
 ```
-help('modules')
+>>> help('modules')
 ```
 
 Note that the term is in quotes.  Python does not care about single or double quotes most of the time so long as there are quotes.  Google "style guide" for reasons other people care.  The 'topics' listing is nice as it somewhat covers the goal of this doc under "IMPORTING" and "NAMESPACES".
@@ -187,7 +185,7 @@ Both directories and file names affect the namespaces that python uses.  As with
 
 For python's built-in help on namespaces, see:
 ```
-help('NAMESPACES')
+>>> help('NAMESPACES')
 ```
 
 ----
@@ -197,7 +195,7 @@ help('NAMESPACES')
 A "builtin" is just some code that is included with python by default - it is "built in".  There's actually a builtins.py in python.  To see a list of the available modules you can import without having to pip install anything, use the help function mentioned earlier.
 
 ```
-help('modules')
+>>> help('modules')
 ``` 
 
 This displays a multi-column list of modules you can import.  Some of the ones I most often use are:
@@ -220,7 +218,7 @@ _testcapi           ftplib              reprlib
 Example time.  Let's import `time` so we can get some `sleep`.
 
 ```
-import time
+>>> import time
 ```
 
 Whew.  That was difficult.  We need some rest after that much work.  There's a `sleep` function in the `time` module that will let use rest for a bit.  But what if you do not know which function you needed?  You could either call help on the module, `help(time)`, or get a listing of the available functions, classes, and objects within the module.
@@ -232,7 +230,7 @@ I just noticed something odd.  On the command line, `ls` is used to get a listin
 Use the `dir()` function to get the list.
 
 ```
-dir(time)
+>>> dir(time)
 ```
 
 And the output:
@@ -256,7 +254,7 @@ As an alternative, you could browse the complete help for the module by using th
 Ok, we found the function that would add a delay but what kind of argument does it take?  Is it seconds or milliseconds?  Integer or decimal?  Call help to find out.
 
 ```
-help(time.sleep)
+>>> help(time.sleep)
 ```
 
 ```
@@ -272,13 +270,13 @@ This output shows it takes a single argument that is the number of seconds and c
 So to sleep for 3.14 seconds but also check to see how long it takes, we use the `time` command (non-python) to time how long the full command takes.  Since there would be some overhead in starting up python, we first run it with nothing and subtract that time from the sleep time.
 
 ```
-time python -c ""
+$ time python -c ""
 
 real	0m0.138s
 user	0m0.052s
 sys	0m0.054s
 
-time python -c "import time; time.sleep(3.14)"
+$ time python -c "import time; time.sleep(3.14)"
 
 real	0m3.278s
 user	0m0.053s
@@ -304,7 +302,6 @@ Now, go into the interactive prompt and import the script.  Note the extension i
 ```
 >>> import first
 This print is not inside of a function.
->>>
 ```
 
 Everything inside the file was executed when it was imported.  That doesn't mean the `print` function within the `hello` function was called as its output is not seen.  Instead, the `def hello(...` block was executed which _defines_ the `hello` function but does not _call_ it.  That means that you can now call `hello`.
@@ -347,6 +344,7 @@ Importing using `from` means you need to be careful of other imports using the s
 >>> from first import generic_func
 >>> generic_func()
 generic_func() from first
+
 >>> from second import generic_func
 >>> generic_func()
 generic_func() from second
@@ -359,10 +357,13 @@ To further show how functions are objects, you can assign functions to variables
 ```
 >>> first.dict_func_example('absolute')
 dict_func_example_a(absolute)
+
 >>> first.dict_func_example('best')
 dict_func_example_b(best)
+
 >>> first.dict_func_example('contraption')
 dict_func_example_c(contraption) 
+
 >>> first.dict_func_example('hello')
 no function matches. hello
 ```
@@ -388,10 +389,15 @@ One handy shortcut that has not been covered yet but already used is "f strings"
 ```
 some_variable = "ipsum dolor"
 another_variable = "consectetur adipisicing"
+
 print("Lorem %s sit amet, %s elit" % (some_variable, another_variable))
+
 print("Lorem {} sit amet, {} elit".format(some_variable, another_variable))
+
 print("Lorem {1} sit amet, {0} elit".format(another_variable, some_variable))
+
 print("Lorem {a} sit amet, {b} elit".format_map({'a': some_variable, 'b': another_variable}))
+
 print(f"Lorem {some_variable} sit amet, {another_variable} elit")
 ```
 
@@ -471,7 +477,7 @@ The example files for this section are in the `structure` folder.
 Quick new thing: running python with the `-c` option allows running a short script without a file and without dealing with the interactive prompt.  "Short", in this case, is only because typing a long script as a one-line command would be silly.
 
 ```
-python -c "import structure; structure.run_all()"
+$ python -c "import structure; structure.run_all()"
 ```
 
 This just imports the first folder in the example and calls a function.  That function imports files from other folders and calls various functions.  The output is a pile of print statements that show the actual order the various files are imported.  Also serves as another example that the files are actually executed when imported.
@@ -568,12 +574,15 @@ The basic flow would be (abbreviating because this is feeling very much like a t
 >>> import structure
 >>> structure.func()
 bad output
+
 # make changes to structure/__init__.py
+
 >>> importlib.reload(structure)
 /structure/__init__.py starting
 CHANGED
 /structure/__init__.py ending
 <module 'structure' from '.../structure/__init__.py'>
+
 >>> structure.func()
 good output
 ``` 
@@ -597,7 +606,7 @@ Not sure how this is related to importing but I added it to the list earlier so 
 There is a command line option on python which allows running a module directly.  Some of the builtin modules include such for whatever reasons.  One that I've used numerous times is in `http.server`.  This will start a simple HTTP server in the current folder.  This server doesn't do much other than serving up the files in the folder.  It can do some cgi (running scripts/executables) but I've not had it do so.
 
 ```
-python -m http.server
+$ python -m http.server
 ```
 
 Starting this in the folder with the example files will allow anyone on the network to see the files.  The generated web page will be a very basic file listing allowing the user to click on the files to see their content.  I've mainly used this to test some simple static pages - mostly css/javascript debugging.  There are further options to limit the address and port used and for specifying the hosted directory.
@@ -609,7 +618,7 @@ Lets say you want to allow a user to run some example code directly from the mod
 The goal is to have this command start with:
 
 ```
-python -m custom_http
+$ python -m custom_http
 ```
 
 First step is to create the `custom_http.py` file and add in the bit that actually lets the `-m` option work.
