@@ -219,7 +219,7 @@ _testcapi           ftplib              reprlib
 For a little insight into a general way to approach writing Python code, try:
 
 ```
-import this
+>>> import this
 ```
 
 The output is a nice little poem-like thing giving a decent summary on how to write "pythonic" code.  It definitely isn't a set of hard-fast rules.  More so, it gives guidance.
