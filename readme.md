@@ -316,14 +316,14 @@ This print is not inside of a function.
 
 Everything inside the file was executed when it was imported.  That doesn't mean the `print` function within the `hello` function was called as its output is not seen.  Instead, the `def hello(...` block was executed which _defines_ the `hello` function but does not _call_ it.  Importing it means that you can now call `hello`.
 
-```
+```python
 >>> first.hello('the arg')
 Hello.  You passed in the arg.
 ```
 
 Because of how it was imported, you needed to specify the namespace when calling the function.  You can change the import line a bit to avoid that.
 
-```
+```python
 >>> from first import hello
 >>> hello('bob')
 Hello.  You passed in bob.
@@ -332,14 +332,16 @@ Hello.  You passed in bob.
 When using the `from` style of import, you either need to specify each item you want imported or use the wildcard, `*`.  The wildcard will import anything in the given module or will be limited to what is in the `__all__` variable if it exists.  In `first.py`, there is an `__all__` which only lists two functions.  Here is the output of `dir()` showing what is getting imported each time.  The `[i for i in dir() if not i.startswith('_')]` bit is a "list comprehension" which is a fancy way of saying a list is being built dynamically.  It isn't part of the topic of this doc and used here only to clarify the output.
 
 With the `__all__` line:
-```
+
+```shell script
 $ python -c "from first import *; print([i for i in dir() if not i.startswith('_')])"
 This print is not inside of a function.
 ['generic_func', 'hello']
 ```
 
 Without the `__all__` line:
-```
+
+```shell script
 $ python -c "from first import *; print([i for i in dir() if not i.startswith('_')])"
 This print is not inside of a function.
 ['dict_func_example', 'dict_func_example_a', 'dict_func_example_b', 'dict_func_example_c', 
@@ -350,7 +352,7 @@ Personally, I stay away from wildcard imports.  It just feels unsafe.  If names 
 
 Importing using `from` means you need to be careful of other imports using the same name.  For the next example, the `second.py` file will also be used.  Both declare a function named `generic_func`.  If you import one and then the other, the second import will essentially overwrite the first.
 
-```
+```python
 >>> from first import generic_func
 >>> generic_func()
 generic_func() from first
@@ -366,7 +368,7 @@ This shows an important concept in how Python deals with functions.  "Everything
 
 To further show how functions are objects, you can assign functions to variables.  One pattern I've used and seen used numerous times is to create/build a dict where the values are all functions.  The functions which start as `dict_func_example` in `first.py` show a basic example of how this works.
 
-```
+```python
 >>> first.dict_func_example('absolute')
 dict_func_example_a(absolute)
 
@@ -403,7 +405,7 @@ There's a whole pile of details not covered here.  Google "python list slicing" 
 ## String Formatting
 One handy shortcut that has not been covered yet but already used is "f strings".  This is a relatively new feature which makes for some shorter lines.  The following print statements all produce the same output.
 
-```
+```python
 some_variable = "ipsum dolor"
 another_variable = "consectetur adipisicing"
 
@@ -422,7 +424,7 @@ In general, the first two prints use positional placeholders - the first `%s` or
 
 The last is probably the most recommended as it just makes a pile of sense.  First, prefix the string with an `f`.  Then, use existing variables for the placeholders.  You can call functions within the placeholders as well.  To force a string lowercase, `f"lowercase example: {variable.lower()}."`.  Essentially, whatever can be done in one expression can be done as the replacement.  The replacement happens on assignment of the string.  As in, if the f-string is assigned to a variable but not printed until later and after some replacement values have changed, the replacements already occurred on the assignment and won't reflect the changes.
 
-```
+```python
 >>> x = 1
 >>> x_str = f"x is {x}"
 >>> x = 3
@@ -444,7 +446,7 @@ This pattern is useful when the functions to decide upon are dynamic.  Building 
 
 Sometimes it would make life "better" to call an imported module/function/class by some other name.  Sometimes this is for purely aesthetic reasons and other times it could be to avoid name conflicts.  Imagine if you need to import a `db` module from package `a` and also from package `b`.  It would be helpful to be able to call them `db_a` and `db_b`.  Another reason would be if the writer of the module did not feel that short names were useful.  The following example shows an exaggerated case of this.
 
-```
+```python
 >>> import really_long_module_name_that_should_really_not_be_allowed
 >>> really_long_module_name_that_should_really_not_be_allowed.example_function_that_also_has_a_really_long_name_that_should_also_not_be_allowed()
 hi
@@ -453,21 +455,24 @@ hi
 The import line itself cannot really be shortened but the module or function name can so later uses in the code aren't quite so ugly.
 
 Renaming the function using the `from/import` style:
-```
+
+```python
 >>> from really_long_module_name_that_should_really_not_be_allowed import example_function_that_also_has_a_really_long_name_that_should_also_not_be_allowed as say_hi
 >>> say_hi()
 hi
 ```
 
 Renaming the module:
-```
+
+```python
 >>> import really_long_module_name_that_should_really_not_be_allowed as blah
 >>> blah.example_function_that_also_has_a_really_long_name_that_should_also_not_be_allowed()
 hi
 ```
 
 Not sure how I feel about this next example, but you can modify the module in memory.  The change is not saved to disk.  This sets an alias for the module, then adds a variable in that module holding the same function body as the long-named function.  Note that the second line with the long function name does not have parenthesis, meaning it isn't calling the function.  Modifying a module not in your code is an example of "monkey patching".  That really is the name for it.  Google it.  Or just read [the wiki](https://en.wikipedia.org/wiki/Monkey_patch).  I can only vaguely remember one time I did this in a production environment.  It was very early on in my Python experience so there was possibly a better way to accomplish the same goal but I didn't know better.
-```
+
+```python
 >>> import really_long_module_name_that_should_really_not_be_allowed as blah
 >>> blah.say_hi = blah.example_function_that_also_has_a_really_long_name_that_should_also_not_be_allowed
 >>> blah.say_hi()
@@ -537,7 +542,7 @@ Python uses a file named `__init__.py` to let it know the folder is supposed to 
 The example files for this section are in the `structure` folder.
 Quick (not so) new thing: running `python` with the `-c` option allows running a short script without a file and without dealing with the interactive prompt.  "Short", in this case, is only because typing a long script as a one-line command would be silly.  Multiple lines are separated by `;`.
 
-```
+```shell script
 $ python -c "import structure; structure.run_all()"
 ```
 
@@ -639,7 +644,7 @@ Use case #1: Plugins.  Imagine a folder where all of the files are inspected and
 Use case #2: Interactive testing.  For simple modules, manually testing some features in the interactive prompt can be useful.  At times, I'll end up with a pile of variables and defined functions in the prompt so stopping and restarting it would be a hassle.  Having the option to reload the module to incorporate changes makes life easier.
 The basic flow would be (abbreviating because this is feeling very much like a tangent):
 
-```
+```python
 >>> import importlib
 >>> import structure
 >>> structure.func()
@@ -675,7 +680,7 @@ Not sure how this is related to importing but I added it to the list earlier so 
 
 There is a command line option on Python which allows running a module directly.  Some of the builtin modules include such for whatever reasons.  One that I've used numerous times is in `http.server`.  This will start a simple HTTP server in the current folder.  This server doesn't do much other than serving up the files in the folder.  It can do some cgi (running scripts/executables) but I've not had it do so.
 
-```
+```shell script
 $ python -m http.server
 ```
 
@@ -687,13 +692,13 @@ Lets say you want to allow a user to run some example code directly from the mod
 
 The goal is to have this command start with:
 
-```
+```shell script
 $ python -m custom_http
 ```
 
 First step is to create the `custom_http.py` file and add in the bit that actually lets the `-m` option work.
 
-```
+```python
 if __name__ == '__main__':
     print("RUNNING!")
 ```
@@ -702,7 +707,7 @@ Having just those two lines will have Python print "RUNNING!" when running the c
 
 A good place to start when you want to extend the functionality of something is the source code for that something.  To do so, we will use the "go to declaration" feature that is in most IDEs.  To do so, add the import line at the top of the file.
 
-```
+```python
 from http import server
 ```
 
