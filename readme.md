@@ -233,7 +233,7 @@ Example time.  Let's import `time` so we can get some `sleep`.
 Whew.  That was difficult.  We need some rest after that much work.  There's a `sleep` function in the `time` module that will let use rest for a bit.  But what if you do not know which function you needed?  You could either call help on the module, `help(time)`, or get a listing of the available functions, classes, and objects within the module.
 
 \<aside><br />
-I just noticed something odd.  On the command line, `ls` is used to get a listing of contents.  But in Python, `dir` is used which is the same command Windows/DOS uses to get a listing of contents.  Anyways...<br />
+I just noticed something odd.  On the command line in Linux and OSX, `ls` is used to get a listing of contents.  But in Python, `dir` is used which is the same command Windows/DOS uses to get a listing of contents.  Anyways...<br />
 \</aside>
 
 Use the `dir()` function to get the list.
@@ -292,7 +292,7 @@ user	0m0.053s
 sys	0m0.051s
 ```
 
-The overhead run took 0.138 seconds and the sleep run took 3.278 seconds.  That actually works out to exactly 3.14 seconds for the `time.sleep` command.  This doesn't always happen as the overhead depends on what else is going on in the os.
+The overhead run took 0.138 seconds and the sleep run took 3.278 seconds.  That actually works out to exactly 3.14 seconds for the `time.sleep` command.  This doesn't always happen as the overhead depends on what else is going on in the os.  I was honestly surprised it worked out so neatly.  On a second run of the empty string, the time was not the same.
 
 ----
 
@@ -300,7 +300,7 @@ The overhead run took 0.138 seconds and the sleep run took 3.278 seconds.  That 
 
 Now, lets say you've created a script and want to test a function within the script.  You either need to set it up so it calls just what you want when executed as `python your_script.py` or you can import the script in the interactive prompt and call the function directly.
 
-Importing a file actually executes the file.  Running the script as `python first.py` will have the following output.
+Importing a file actually executes the file.  The `first.py` script has a `print` statement outside of any defined functions.  Running the script as `python first.py` will have the following output.
 
 ```
 This print is not inside of a function.
@@ -313,14 +313,14 @@ Now, go into the interactive prompt and import the script.  Note the extension i
 This print is not inside of a function.
 ```
 
-Everything inside the file was executed when it was imported.  That doesn't mean the `print` function within the `hello` function was called as its output is not seen.  Instead, the `def hello(...` block was executed which _defines_ the `hello` function but does not _call_ it.  That means that you can now call `hello`.
+Everything inside the file was executed when it was imported.  That doesn't mean the `print` function within the `hello` function was called as its output is not seen.  Instead, the `def hello(...` block was executed which _defines_ the `hello` function but does not _call_ it.  Importing it means that you can now call `hello`.
 
 ```
 >>> first.hello('the arg')
 Hello.  You passed in the arg.
 ```
 
-Because of how it was imported, you needed to specify the namespace.  You can change the import line a bit to avoid that.
+Because of how it was imported, you needed to specify the namespace when calling the function.  You can change the import line a bit to avoid that.
 
 ```
 >>> from first import hello
@@ -427,6 +427,40 @@ Back to the `dict_func_example` function.  It creates a dict named `pick_one`.  
 To pick the appropriate function, the first character of the variable `arg` is used in the call to `.get()`.  If that character is not a key in `pick_one`, the function `dict_func_example_default` is used.  Again, no parens on the functions being used just yet.
 Now that a function has been assigned to the variable `func`, it can be called as if we were calling it by name.
 This pattern is useful when <insert reasonable use-case here>.  An alternative to using this pattern is shown in `not_using_dict_func_example`.  This uses `if/elif/else` to pick and execute the appropriate function.  An advantage the dict pattern has is the dict could be generated at runtime while the `if/elif/else` is static.
+
+## Import Alias
+
+Sometimes it would make life "better" to call an imported module/function/class by some other name.  Sometimes this is for purely aesthetic reasons and other times it could be to avoid name conflicts.  Imagine if you need to import a `db` module from package `a` and also from package `b`.  It would be helpful to be able to call them `db_a` and `db_b`.  Another reason would be if the writer of the module did not feel that short names were useful.  The following example shows an exaggerated case of this.
+
+```
+>>> import really_long_module_name_that_should_really_not_be_allowed
+>>> really_long_module_name_that_should_really_not_be_allowed.example_function_that_also_has_a_really_long_name_that_should_also_not_be_allowed()
+hi
+```
+
+The import line itself cannot really be shortened but the module or function name can.
+
+Renaming the function using the `from/import` style:
+```
+>>> from really_long_module_name_that_should_really_not_be_allowed import example_function_that_also_has_a_really_long_name_that_should_also_not_be_allowed as say_hi
+>>> say_hi()
+hi
+```
+
+Renaming the module:
+```
+>>> import really_long_module_name_that_should_really_not_be_allowed as blah
+>>> blah.example_function_that_also_has_a_really_long_name_that_should_also_not_be_allowed()
+hi
+```
+
+Not sure how I feel about this, but you can modify the module in memory.  The change is not saved to disk.  This sets an alias for the module, then adds a variable in that module holding the same function body as the long-named function.  Note that the second line with the long function name does not have parenthesis, meaning it isn't calling the function.  Modifying a module not in your code is an example of "monkey patching".  That really is the name for it.  Google it.
+```
+>>> import really_long_module_name_that_should_really_not_be_allowed as blah
+>>> blah.say_hi = blah.example_function_that_also_has_a_really_long_name_that_should_also_not_be_allowed
+>>> blah.say_hi()
+hi
+```
 
 # Importing Sibling File From Your File
 
