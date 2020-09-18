@@ -386,14 +386,14 @@ Side tracking a little to cover some details used in this example.
 ## The dict object
 A dict is a dictionary object.  It is made up of key/value pairs.  The keys can be any mix of "hashable types".  In general, strings, numbers, and tuples of strings and numbers are all I've used as keys.  The values can be anything from other strings and numbers to other dicts, functions, or objects.
 
-A dict is declared by using the curly braces and colons, `{'key1': 'value1', 'key2': 'value2'}`.  Keys can be added or removed after the initial declaration.  The dict is not immutable.  Not much in Python is immutable.  Adding a key can be done by assigning a value to it, `a_dict_var['new key'] = 'some value'`.
+A dict is declared by using the curly braces and colons, `{'key1': 'value1', 'key2': 'value2'}`.  Keys can be added or removed after the initial declaration.  The dict is not immutable.  Not much in Python is immutable.  Adding a key can be done by assigning a value to it, `a_dict_var['new key'] = 'some value'`.  Removing a key can be done by `del a_dict_var['new key']`.
 
 Getting a value from a dict can be done using the square brackets the same way, `print(a_dict_var['new key'])`.  A caveat of using the square brackets is if the key does not exist in the dict, a `KeyError` will be raised.  If that error is not handled by your code, the program will crash.
 
 The `.get()` function on a dict is a way to safely get a value from a dict when you are not certain the key exists.  The `.get()` function takes one required argument and one optional argument for the default if the key does not exist.  In the `dict_func_example` function, if the desired key is not in the dict, the function `dict_func_example_default` is returned and assigned to `func`.
 
 ## Square Brackets
-We've already covered one use for assigning and retrieving values in a dict.  Square brackets are used whenever an object can be indexed(or subscriptable).  As in, a list, tuple, set, dict, string, and others I'm likely forgetting.  You can add the ability for custom classes to handle square brackets by implementing the `__getitem__` function.
+We've already covered one use for assigning and retrieving values in a dict.  Square brackets are used whenever an object can be indexed(or is subscriptable).  As in, a list, tuple, set, dict, string, and others I'm likely forgetting.  You can add the ability for custom classes to handle square brackets by implementing the `__getitem__` function.
 
 For lists, strings, tuples, and sets, the square brackets take an integer as the key.  The first element is 0 and the count goes up by one from there.  In the example function, the first character of the argument is found by `arg[0]`.  The function makes no attempt to validate the argument so it can easily be broken by passing in any value that is not subscriptable.
 
@@ -417,7 +417,8 @@ print("Lorem {a} sit amet, {b} elit".format_map({'a': some_variable, 'b': anothe
 print(f"Lorem {some_variable} sit amet, {another_variable} elit")
 ```
 
-In general, the first two prints use positional placeholders - the first `%s` or `{}` is replaced by the first argument following the string and so on.  The third print is similar but the number in the braces corresponds to the index of the argument with 0 being the first argument after the string.  That helps if you want to repeat a value in the string, you can have "{1} {1} {0} {1}" which would repeat the '1' arg three times and the '0' arg once.  The fourth print uses a dict as the arg where the keys act as the placeholders in the string.  If the string has a placeholder that does not exist in the dict, a KeyError will be raised.  You can create your own object that implements the `__missing__` function to get around KeyErrors, though.
+In general, the first two prints use positional placeholders - the first `%s` or `{}` is replaced by the first argument following the string and so on.  The third print is similar but the number in the braces corresponds to the index of the argument with `0` being the first argument after the string.  That helps if you want to repeat a value in the string, you can have `{1} {1} {0} {1}` which would repeat the `1` arg three times and the `0` arg once.  The fourth print uses a dict as the arg where the keys act as the placeholders in the string.  If the string has a placeholder that does not exist in the dict, a KeyError will be raised.  You can create your own object that implements the `__missing__` function to get around KeyErrors, though.
+
 The last is probably the most recommended as it just makes a pile of sense.  First, prefix the string with an 'f'.  Then, use existing variables for the placeholders.  You can call functions within the placeholders as well.  To force a string lowercase, `f"lowercase example: {variable.lower()}."`.  Essentially, whatever can be done in one expression can be done as the replacement.  The replacement happens on assignment of the string.  As in, if the f-string is assigned to a variable but not printed until later and after some replacement values have changed, the replacements already occurred on the assignment and won't reflect the changes.
 
 ```
