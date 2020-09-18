@@ -691,7 +691,7 @@ Starting this in the folder with the example files will allow anyone on the netw
 
 # Building your own runnable module
 
-Lets say you want to allow a user to run some example code directly from the module.  In this completely made up example, we will add something to the `http.server` just so there's a lot of the interactivity already built in.
+Lets say you want to allow a user to run some example code directly from the module.  In this completely made up example, we will add something to the `http.server` because there's already a lot of interactivity already built in.
 
 The goal is to have this command start with:
 
@@ -706,7 +706,7 @@ if __name__ == '__main__':
     print("RUNNING!")
 ```
 
-Having just those two lines will have Python print "RUNNING!" when running the command show earlier.  The reason for the `if` block is so someone importing this file will not get the "RUNNING!" output.  In a more fleshed out example, the block would prevent a server from starting up when all that was wanted was an import.
+Having just those two lines will have Python print "RUNNING!" when running the command show earlier.  The reason for the `if` block is so someone importing this file will not get the "RUNNING!" output.  In the more fleshed out example included, the block prevents a server from starting up when all that was wanted was an import.  The `__name__` special variable which generally tells the name of the current container.  For the script that directly executed, the value seems to be `__main__`.  For a script imported, the value will likely be the name of the script minus extension.
 
 A good place to start when you want to extend the functionality of something is the source code for that something.  To do so, we will use the "go to declaration" feature that is in most IDEs.  To do so, add the import line at the top of the file.
 
