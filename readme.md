@@ -16,11 +16,12 @@ The point is, having all code in one monolithic source file is not the best rout
    * [The dict Object](#the-dict-object)
    * [Square Brackets](#square-brackets)
    * [String Formatting](#string-formatting)
- * [Importing sibling file from your file](#importing-sibling-file-from-your-file)
- * [Circular imports](#circular-imports)
- * [Adding directory structures](#adding-directory-structures)
- * [Running a module](#running-a-module)
- * [Building your own runnable module](#building-your-own-runnable-module)
+ * [Importing Sibling File From Your File](#importing-sibling-file-from-your-file)
+ * [Circular Imports](#circular-imports)
+ * [Adding Directory Structures](#adding-directory-structures)
+ * [Running a Module](#running-a-module)
+ * [Building Your Own Runnable Module](#building-your-own-runnable-module)
+ * [Grouping and Sorting It All Out](#grouping-and-sorting-it-all-out)
 
 ----
 
@@ -578,7 +579,7 @@ Usually, you would pay close enough attention to not import an object just to cr
 
  * Importing a sibling file works pretty much the same as importing from the interactive prompt in the previous section.
 
-# Circular imports
+# Circular Imports
 This is when one file imports another file which then imports another file which imports another eventually importing the first file again.  Python will flag this as some error as shown below with a "most likely" note.  Sometimes it will be ImportError and other times it will be AttributeError.  To see this output, run `python circular_a.py`.
 
 ```
@@ -601,7 +602,7 @@ This tends to pop up mostly when using frameworks.  There have been times that I
 
  * Bad stuff.  Avoid it.
 
-# Adding directory structures
+# Adding Directory Structures
 
 So far, the files have been in a flat namespace.  Everything has been at one level.  For sufficiently large projects, there would be groupings that would make sense to isolate.  Such as a group of modules all related to database access, another couple of groups related to file access and socket communication, and a final group for general utility functions.  At the first level within a group, the functions/classes/etc would likely be quite generic for the topic.  Going another folder level in would bring in some more specialized objects.  Bad car analogy: 1st level in would be a book on automobiles.  Next level in would be a book on cars (or trucks, vans, SUVs).  Next level in would be a book on luxury cars (or racing, cheap, off-road).
 
@@ -744,7 +745,7 @@ Given all that, I've rarely used it.  So the above few paragraphs are somewhat p
 * Folders allow grouping files into logical segments.  The deeper the folders, the more specialized.   
 * `__init__.py` is needed in every folder of a package.
 
-# Running a module
+# Running a Module
 
 Not sure how this is related to importing but I added it to the table of contents earlier so here we go.
 
@@ -760,7 +761,7 @@ Starting this in the folder with the example files will allow anyone on the netw
 
  * Running a module as a script allows for including example/basic usage as active code.
 
-# Building your own runnable module
+# Building Your Own Runnable Module
 
 Lets say you want to allow a user to run some example code directly from the module.  In this completely made up example, we will add something to the `http.server` because there's already a lot of interactivity already built in.
 
@@ -830,3 +831,40 @@ This does work.  But it doesn't have much at all to do with the goal of this doc
 
  * Not a great example of class inheritance.
  * No real magic to make a module executable, just an if block checking the `__name__` variable.
+
+# Grouping and Sorting It All Out
+
+Eventually, you will end up with a file that has many imports.  It is part of many style guides to have one module per
+line.  That is, one source per line - importing unrelated modules on the same line is what to avoid.  For example, if
+you needed the `os`, `re`, and `pathlib` modules imported, they would each have their own lines.
+
+```
+import os
+import pathlib
+import re
+```
+
+If you needed a pile of modules from the `Flask` package (a small web server), you could have them on one line.
+
+```
+from flask import Flask, send_file, safe_join, render_template, request
+```
+
+There are three general groups for imports that I use.  The first group is for the builtin packages.  The second group is for third-party packages that are not part of the project.  The final group is for modules/packages that are part of the project.  An example of this is from a project that uses environment variables (accessed via the `os` module), sends data to an MQTT server (via the paho.mqtt package), and uses some modules in the same project to manage variables in a database (via db_vars).  Each group is alphabetically sorted with a single space between them.  Both `from` and `import` are ignored; the sorting starts with the package name.
+
+```
+import json
+import os
+
+import paho.mqtt.client as mqtt
+import psycopg2 as pg
+
+import db_vars
+import local_setup
+```
+
+## Summary
+
+ * Three groups - Python builtins, third-party packages, current project packages.
+ * Sort alphabetically within groups.
+ * One import per line unless they all come from the same package.
